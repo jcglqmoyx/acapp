@@ -203,7 +203,7 @@ class Player extends AcGameObject {
 			return false;
 		});
 		this.playground.game_map.$canvas.mousedown(function(e) {
-			const rect = outer.ctx.canvas.getBoundingRectClientRect();
+			const rect = outer.ctx.canvas.getBoundingClientRect();
 			if (e.which === 3) {
 				outer.move_to(e.clientX - rect.left, e.clientY - rect.top);	
 			} else if (e.which === 1) {
