@@ -34,6 +34,7 @@ class AcGamePlayground {
     }
 
 	show(mode) {
+		let outer = this;
 		this.$playground.show();
 
 		this.width = this.$playground.width();
@@ -50,7 +51,12 @@ class AcGamePlayground {
 				this.players.push(new Player(this, this.width / 2 / this.scale, 0.5, 0.05, this.get_random_color(), 0.15, "robot"));
 			}
 		} else if (mode === "multi mode") {
-			
+			this.mps = new MultiPlayerSocket(this);		
+			this.mps.uuid = this.players[0].uuid;
+
+			this.mps.ws.onopen = function() {
+				outer.mps.send_create_player(outer.root.settings.username, outer.root.settings.photo);
+			};
 		}
 	}
 
