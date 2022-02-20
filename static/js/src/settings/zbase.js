@@ -237,9 +237,7 @@ class Settings {
     acapp_login(appid, redirect_uri, scope, state) {
         let outer = this;
         this.root.AcWingOS.api.oauth2.authorize(appid, redirect_uri, scope, state, function(resp) {
-            console.log(resp);
             if (resp.result === "success") {
-                console.log('....fasdfasdfasdf...');
                 outer.username = resp.username; 
                 outer.photo = resp.photo;
                 outer.hide();
