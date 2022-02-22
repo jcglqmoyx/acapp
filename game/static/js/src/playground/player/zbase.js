@@ -64,8 +64,8 @@ class Player extends AcGameObject {
 			return false;
 		});
 		this.playground.game_map.$canvas.mousedown(function(e) {
-			if (outer.playground.state != "fighting") {
-				return false;
+			if (outer.playground.state !== "fighting") {
+				return true;
 			}
 			const rect = outer.ctx.canvas.getBoundingClientRect();
 			if (e.which === 3) {
@@ -103,8 +103,18 @@ class Player extends AcGameObject {
 			}
 		});
 
-		$(window).keydown(function(e) {
-			if (outer.playground.state != "fighting") {
+		this.playground.game_map.$canvas.keydown(function(e) {
+			if (e.which === 13) { // Enter
+				if (outer.playground.mode === "multi mode") {
+					outer.playground.chat_field.show_input();
+					return false;
+				}
+			} else if (e.which === 27) { // Esc
+				if (outer.playground.mode === "multi mode") {
+					outer.playground.chat_field.hide_input();
+				}
+			}
+			if (outer.playground.state !== "fighting") {
 				return true;
 			}
 
