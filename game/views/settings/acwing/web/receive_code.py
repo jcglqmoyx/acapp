@@ -1,18 +1,21 @@
-from django.shortcuts import redirect
-from django.core.cache import cache
-import requests
-from django.contrib.auth.models import User
-from game.models.player.player import Player
-from django.contrib.auth import login
 from random import randint
+
+import requests
+from django.contrib.auth import login
+from django.contrib.auth.models import User
+from django.core.cache import cache
+from django.shortcuts import redirect
+
+from game.models.player.player import Player
+
 
 def receive_code(request):
     data = request.GET
     code = data.get('code')
     state = data.get('state')
-    
+
     if not cache.has_key(state):
-        return redirect('index') 
+        return redirect('index')
     cache.delete(state)
 
     apply_access_token_url = 'https://www.acwing.com/third_party/api/oauth2/access_token/'
@@ -21,14 +24,14 @@ def receive_code(request):
         'secret': '260db95c35bf49c192b0f75086fd8274',
         'code': code
     }
-    
+
     access_token_res = requests.get(apply_access_token_url, params=params).json()
 
     access_token = access_token_res['access_token']
     openid = access_token_res['openid']
-    
+
     player = Player.objects.filter(openid=openid)
-    if player.exists(): #　如果用户已存在，则无需重新获取信息，直接登录即可
+    if player.exists():  # 如果用户已存在，则无需重新获取信息，直接登录即可
         login(request, player[0].user)
         return redirect('index')
 
@@ -40,7 +43,7 @@ def receive_code(request):
     userinfo_res = requests.get(get_userinfo_url, params=params).json()
     username = userinfo_res['username']
     photo = userinfo_res['photo']
-    
+
     while User.objects.filter(username=username).exists():
         username += str(randint(0, 9))
     user = User.objects.create(username=username)

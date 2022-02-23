@@ -1,5 +1,6 @@
-from django.http import JsonResponse
 from django.contrib.auth import authenticate, login
+from django.http import JsonResponse
+
 
 def signin(request):
     data = request.GET
@@ -7,7 +8,7 @@ def signin(request):
     password = data.get('password')
     user = authenticate(username=username, password=password)
     if not user:
-        return JsonResponse ({
+        return JsonResponse({
             'result': '用户名密码不正确'
         })
     login(request, user)

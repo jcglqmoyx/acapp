@@ -139,7 +139,7 @@
     font-size: 4vh;
     font-style: italic;
     text-align: center;
-    background-color: rgba(39,21,28, 0.6);
+    background-color: rgba(39, 21, 28, 0.6);
     border-radius: 10px;
     letter-spacing: 0.5vw;
     cursor: pointer;
@@ -197,6 +197,6 @@
     color: white;
     font-size: 2vh;
 
-    background-color: rgba(222,225,230, 0.2);
+    background-color: rgba(222, 225, 230, 0.2);
 }
 

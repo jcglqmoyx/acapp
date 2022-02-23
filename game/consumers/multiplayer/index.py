@@ -3,20 +3,26 @@ import json
 from channels.db import database_sync_to_async
 from channels.generic.websocket import AsyncWebsocketConsumer
 from django.core.cache import cache
-from game.models.player.player import Player
-from match_system.src.match_server.match_service import Match
 from thrift.protocol import TBinaryProtocol
 from thrift.transport import TSocket
 from thrift.transport import TTransport
 
+from game.models.player.player import Player
+from match_system.src.match_server.match_service import Match
+
 
 class MultiPlayer(AsyncWebsocketConsumer):
+    def __init__(self, *args, **kwargs):
+        super().__init__(args, kwargs)
+        self.uuid = None
+        self.room_name = None
+
     async def connect(self):
         await self.accept()
 
     async def disconnect(self, close_code):
         if self.room_name:
-            await self.channel_layer.group_discard(self.room_name, self.channel_name);
+            await self.channel_layer.group_discard(self.room_name, self.channel_name)
 
     async def create_player(self, data):
         self.room_name = None
@@ -47,7 +53,7 @@ class MultiPlayer(AsyncWebsocketConsumer):
 
     async def group_send_event(self, data):
         if not self.room_name:
-            keys = cache.keys('*%s*' % (self.uuid))
+            keys = cache.keys('*%s*' % self.uuid)
             if keys:
                 self.room_name = keys[0]
         await self.send(text_data=json.dumps(data))

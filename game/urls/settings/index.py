@@ -1,4 +1,5 @@
 from django.urls import path, include
+
 from game.views.settings.getinfo import getinfo
 from game.views.settings.login import signin
 from game.views.settings.logout import signout

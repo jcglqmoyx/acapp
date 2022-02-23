@@ -1,74 +1,74 @@
 class ChatField {
-	constructor(playground) {
-		this.playground = playground;
+    constructor(playground) {
+        this.playground = playground;
 
-		this.$history = $(`<div class="ac-game-chat-field-history">history</div>`);
-		this.$input = $(`<input type="text" class="ac-game-chat-field-input">`);
-		
-		this.$history.hide();
-		this.$input.hide();
-		this.func_id = null;
+        this.$history = $(`<div class="ac-game-chat-field-history">history</div>`);
+        this.$input = $(`<input type="text" class="ac-game-chat-field-input">`);
 
-		this.playground.$playground.append(this.$history);
-		this.playground.$playground.append(this.$input);
+        this.$history.hide();
+        this.$input.hide();
+        this.func_id = null;
 
-		this.start();
-	}
+        this.playground.$playground.append(this.$history);
+        this.playground.$playground.append(this.$input);
 
-	start() {
-		this.add_listening_events();
-	}
+        this.start();
+    }
 
-	add_listening_events() {
-		let outer = this;
-		this.$input.keydown(function(e) {
-			if (e.which === 27) {
-				outer.hide_input();
-				return false;
-			} else if (e.which === 13) {
-				let username = outer.playground.root.settings.username;
-				let text = outer.$input.val();
-				if (text) {
-					outer.$input.val("");
-					outer.add_message(username, text);
-					outer.playground.mps.send_message(username, text);
-				}
-				return false;
-			}
-		});
-	}
+    start() {
+        this.add_listening_events();
+    }
 
-	render_message(message) {
-		return $(`<div>${message}</div>`);
-	}
+    add_listening_events() {
+        let outer = this;
+        this.$input.keydown(function (e) {
+            if (e.which === 27) {
+                outer.hide_input();
+                return false;
+            } else if (e.which === 13) {
+                let username = outer.playground.root.settings.username;
+                let text = outer.$input.val();
+                if (text) {
+                    outer.$input.val("");
+                    outer.add_message(username, text);
+                    outer.playground.mps.send_message(username, text);
+                }
+                return false;
+            }
+        });
+    }
 
-	add_message(username, text) {
-		this.show_history();
-		let message = `[${username}][${text}]`;	
-		this.$history.append(this.render_message(message));
-		this.$history.scrollTop(this.$history[0].scrollHeight);
-	}
+    render_message(message) {
+        return $(`<div>${message}</div>`);
+    }
 
-	show_history() {
-		let outer = this;
-		this.$history.fadeIn();	
+    add_message(username, text) {
+        this.show_history();
+        let message = `[${username}][${text}]`;
+        this.$history.append(this.render_message(message));
+        this.$history.scrollTop(this.$history[0].scrollHeight);
+    }
 
-		if (this.func_id) clearTimeout(this.func_id);
+    show_history() {
+        let outer = this;
+        this.$history.fadeIn();
 
-		this.func_id = setTimeout(function() {
-			outer.$history.fadeOut();	
-			outer.func_id = null;
-		}, 3000);
-	}
+        if (this.func_id) clearTimeout(this.func_id);
 
-	show_input() {
-		this.show_history();
-		this.$input.show();
-		this.$input.focus();
-	}
+        this.func_id = setTimeout(function () {
+            outer.$history.fadeOut();
+            outer.func_id = null;
+        }, 3000);
+    }
 
-	hide_input() {
-		this.$input.hide();
-		this.playground.game_map.$canvas.focus();
-	}
+    show_input() {
+        this.show_history();
+        this.$input.show();
+        this.$input.focus();
+    }
+
+    hide_input() {
+        this.$input.hide();
+        this.playground.game_map.$canvas.focus();
+    }
 }
