@@ -18,16 +18,19 @@ class AcGameObject {
 		return res;
 	}
 
-	start() {
+	start() { // 只在第一帧执行一次
 	}
 
-	update() {
+	update() { // 每一帧均会执行一次
+	}
+
+	late_update() { // 在每一帧最后执行
 	}
 	
-	on_destroy() {
+	on_destroy() { // 在被销毁前执行一次
 	}
 
-	destroy() {
+	destroy() { // 删掉该物体
 		this.on_destroy();
 
 		for (let i = 0; i < AC_GAME_OBJECTS.length; i++) {
@@ -51,6 +54,11 @@ let AC_GAME_ANIMATION = function(timestamp) {
 			obj.timedelta = timestamp - last_timestamp;
 			obj.update();
 		}
+	}
+
+	for (let i = 0; i < AC_GAME_OBJECTS.length; i++) {
+		let obj = AC_GAME_OBJECTS[i];
+		obj.late_update();
 	}
 
 	last_timestamp = timestamp;
